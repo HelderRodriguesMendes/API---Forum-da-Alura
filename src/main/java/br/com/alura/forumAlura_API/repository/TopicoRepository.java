@@ -10,5 +10,5 @@ import java.util.List;
 public interface TopicoRepository extends JpaRepository<Topico, Long> {
 
     //pesquisa por um atributo que é de uma classe de relacionamento
-    List<Topico> findByCursoNome(String nomeCurso);
+    List<Topico> findByCurso_Nome(String nomeCurso);
 }
