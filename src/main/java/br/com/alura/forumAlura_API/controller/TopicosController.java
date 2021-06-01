@@ -12,15 +12,23 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@RequestMapping("/topico")
 public class TopicosController {
 
     @Autowired
     TopicoRepository topicoRepository;
 
-    @RequestMapping("/topicos")
-    public List<TopicoDto> lista(){
+    @RequestMapping("/listar")
+    public List<TopicoDto> listar(){
 
         List<Topico> topicos = topicoRepository.findAll();
+        return TopicoDto.converte(topicos);
+    }
+
+    @RequestMapping("/pesquisarNome")
+    public List<TopicoDto> pesquisar(String nomeCurso){
+
+        List<Topico> topicos = topicoRepository.findByCursoNome(nomeCurso);
         return TopicoDto.converte(topicos);
     }
 }
