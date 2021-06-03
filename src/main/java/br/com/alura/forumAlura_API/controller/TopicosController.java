@@ -42,19 +42,32 @@ public class TopicosController {
     }
 
     @GetMapping("detalhar/{id}")
-    public DetalhesDoTopicoDto detalhar(@PathVariable Long id){
-        return new DetalhesDoTopicoDto(topicoService.detalhar(id));
+    public ResponseEntity<DetalhesDoTopicoDto> detalhar(@PathVariable Long id){
+        Topico topico = topicoService.detalhar(id);
+        if(topico == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(new DetalhesDoTopicoDto(topico));
     }
 
     @PutMapping("/atualizar/{id}")
     @Transactional
     public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm atualizacaoTopicoForm){
-        return ResponseEntity.ok(new TopicoDto(topicoService.atualizar(id, atualizacaoTopicoForm)));
+        Topico topico = topicoService.atualizar(id, atualizacaoTopicoForm);
+        if(topico == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(new TopicoDto(topico));
     }
 
     @DeleteMapping("deletar/{id}")
     @Transactional
     public ResponseEntity<List<TopicoDto>> remover(@PathVariable Long id){
-        return ResponseEntity.ok(topicoService.remover(id));
+        List<TopicoDto> topicoDtos = topicoService.remover(id);
+
+        if(topicoDtos.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(topicoDtos);
     }
 }
