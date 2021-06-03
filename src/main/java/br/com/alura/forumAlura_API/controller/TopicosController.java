@@ -1,10 +1,9 @@
 package br.com.alura.forumAlura_API.controller;
 
 import br.com.alura.forumAlura_API.controller.dto.TopicoDto;
+import br.com.alura.forumAlura_API.controller.dto.DetalhesDoTopicoDto;
 import br.com.alura.forumAlura_API.controller.form.TopicoForm;
-import br.com.alura.forumAlura_API.model.Curso;
 import br.com.alura.forumAlura_API.model.Topico;
-import br.com.alura.forumAlura_API.repository.TopicoRepository;
 import br.com.alura.forumAlura_API.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -22,6 +20,7 @@ public class TopicosController {
 
     @Autowired
     TopicoService topicoService;
+
     @GetMapping("/listar")
     public List<TopicoDto> listar(){
         return topicoService.listar();
@@ -37,5 +36,10 @@ public class TopicosController {
         Topico topico = topicoService.salvar(topicoForm);
         URI uri = uriBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
         return ResponseEntity.created(uri).body(new TopicoDto(topico));
+    }
+
+    @GetMapping("detalhar/{id}")
+    public DetalhesDoTopicoDto detalhar(@PathVariable Long id){
+        return new DetalhesDoTopicoDto(topicoService.detalhar(id));
     }
 }
