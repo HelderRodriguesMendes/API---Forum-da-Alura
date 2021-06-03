@@ -47,4 +47,9 @@ public class TopicoService {
         topico.setMensagem(atualizacaoTopicoForm.getMensagem());
         return topico;
     }
+
+    public List<TopicoDto> remover(Long id){
+        topicoRepository.deleteById(id);
+        return listar();
+    }
 }
