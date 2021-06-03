@@ -35,4 +35,8 @@ public class TopicoService {
         Topico topico = topicoForm.converter(curso);
         return topicoRepository.save(topico);
     }
+
+    public Topico detalhar(Long id){
+        return topicoRepository.getById(id);
+    }
 }
