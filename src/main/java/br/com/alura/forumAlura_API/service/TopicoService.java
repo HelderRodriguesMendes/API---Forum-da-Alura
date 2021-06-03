@@ -9,7 +9,9 @@ import br.com.alura.forumAlura_API.repository.TopicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TopicoService {
@@ -38,18 +40,28 @@ public class TopicoService {
     }
 
     public Topico detalhar(Long id){
-        return topicoRepository.getById(id);
+        Optional<Topico> topicoOptional = topicoRepository.findById(id);
+        if(!topicoOptional.isPresent()){
+            return null;
+        }
+        return topicoOptional.get();
     }
 
     public Topico atualizar(Long id, AtualizacaoTopicoForm atualizacaoTopicoForm){
         Topico topico = detalhar(id);
-        topico.setTitulo(atualizacaoTopicoForm.getTitulo());
-        topico.setMensagem(atualizacaoTopicoForm.getMensagem());
+        if(topico != null){
+            topico.setTitulo(atualizacaoTopicoForm.getTitulo());
+            topico.setMensagem(atualizacaoTopicoForm.getMensagem());
+        }
         return topico;
     }
 
     public List<TopicoDto> remover(Long id){
-        topicoRepository.deleteById(id);
-        return listar();
+        Optional<Topico> topico = topicoRepository.findById(id);
+        if(topico.isPresent()){
+            topicoRepository.deleteById(id);
+            return listar();
+        }
+        return new ArrayList<>();
     }
 }
