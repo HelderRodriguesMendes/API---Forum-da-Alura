@@ -2,6 +2,7 @@ package br.com.alura.forumAlura_API.controller;
 
 import br.com.alura.forumAlura_API.controller.dto.TopicoDto;
 import br.com.alura.forumAlura_API.controller.dto.DetalhesDoTopicoDto;
+import br.com.alura.forumAlura_API.controller.form.AtualizacaoTopicoForm;
 import br.com.alura.forumAlura_API.controller.form.TopicoForm;
 import br.com.alura.forumAlura_API.model.Topico;
 import br.com.alura.forumAlura_API.service.TopicoService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -41,5 +43,11 @@ public class TopicosController {
     @GetMapping("detalhar/{id}")
     public DetalhesDoTopicoDto detalhar(@PathVariable Long id){
         return new DetalhesDoTopicoDto(topicoService.detalhar(id));
+    }
+
+    @PutMapping("/atualizar/{id}")
+    @Transactional
+    public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm atualizacaoTopicoForm){
+        return ResponseEntity.ok(new TopicoDto(topicoService.atualizar(id, atualizacaoTopicoForm)));
     }
 }
