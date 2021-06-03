@@ -1,6 +1,7 @@
 package br.com.alura.forumAlura_API.service;
 
 import br.com.alura.forumAlura_API.controller.dto.TopicoDto;
+import br.com.alura.forumAlura_API.controller.form.AtualizacaoTopicoForm;
 import br.com.alura.forumAlura_API.controller.form.TopicoForm;
 import br.com.alura.forumAlura_API.model.Curso;
 import br.com.alura.forumAlura_API.model.Topico;
@@ -38,5 +39,12 @@ public class TopicoService {
 
     public Topico detalhar(Long id){
         return topicoRepository.getById(id);
+    }
+
+    public Topico atualizar(Long id, AtualizacaoTopicoForm atualizacaoTopicoForm){
+        Topico topico = detalhar(id);
+        topico.setTitulo(atualizacaoTopicoForm.getTitulo());
+        topico.setMensagem(atualizacaoTopicoForm.getMensagem());
+        return topico;
     }
 }
