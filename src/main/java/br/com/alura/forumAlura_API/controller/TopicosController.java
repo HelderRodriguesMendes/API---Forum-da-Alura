@@ -7,6 +7,7 @@ import br.com.alura.forumAlura_API.controller.form.TopicoForm;
 import br.com.alura.forumAlura_API.model.Topico;
 import br.com.alura.forumAlura_API.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -24,13 +25,13 @@ public class TopicosController {
     TopicoService topicoService;
 
     @GetMapping("/listar")
-    public List<TopicoDto> listar(){
-        return topicoService.listar();
+    public Page<TopicoDto> listar(@RequestParam int pagina, @RequestParam int qtd){
+        return topicoService.listar(pagina, qtd);
     }
 
     @GetMapping("/pesquisarNome")
-    public List<TopicoDto> pesquisar(String nomeCurso){
-        return topicoService.pesquisar(nomeCurso);
+    public Page<TopicoDto> pesquisar(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina, @RequestParam int qtd){
+        return topicoService.pesquisar(nomeCurso, pagina, qtd);
     }
 
     @PostMapping("/salvar")
@@ -62,8 +63,8 @@ public class TopicosController {
 
     @DeleteMapping("deletar/{id}")
     @Transactional
-    public ResponseEntity<List<TopicoDto>> remover(@PathVariable Long id){
-        List<TopicoDto> topicoDtos = topicoService.remover(id);
+    public ResponseEntity<?> remover(@PathVariable Long id){
+        Page<TopicoDto> topicoDtos = topicoService.remover(id);
 
         if(topicoDtos.isEmpty()){
             return ResponseEntity.notFound().build();
