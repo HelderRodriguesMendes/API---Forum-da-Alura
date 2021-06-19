@@ -2,6 +2,7 @@ package br.com.alura.forumAlura_API.controller.dto;
 
 import br.com.alura.forumAlura_API.model.Topico;
 import lombok.Getter;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +22,7 @@ public class TopicoDto {
         this.dataCriacao = topico.getDataCriacao();
     }
 
-    public static List<TopicoDto> converte(List<Topico> topicos) {
-        return topicos.stream().map(TopicoDto::new).collect(Collectors.toList());
+    public static Page<TopicoDto> converte(Page<Topico> topicos) {
+        return topicos.map(TopicoDto::new);
     }
 }

@@ -7,6 +7,9 @@ import br.com.alura.forumAlura_API.model.Curso;
 import br.com.alura.forumAlura_API.model.Topico;
 import br.com.alura.forumAlura_API.repository.TopicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,14 +25,19 @@ public class TopicoService {
     @Autowired
     CursoService cursoService;
 
-    public List<TopicoDto> listar(){
-        List<Topico> topicos = topicoRepository.findAll();
+    public Page<TopicoDto> listar(int pagina, int qtd){
+
+        Pageable paginacao = PageRequest.of(pagina, qtd);
+        Page<Topico> topicos = topicoRepository.findAll(paginacao);
+
         return TopicoDto.converte(topicos);
     }
 
-    public List<TopicoDto> pesquisar(String nomeCurso){
+    public Page<TopicoDto> pesquisar(String nomeCurso, int pagina, int qtd){
 
-        List<Topico> topicos = topicoRepository.findByCurso_Nome(nomeCurso);
+        Pageable paginacao = PageRequest.of(pagina, qtd);
+
+        Page<Topico> topicos = topicoRepository.findByCurso_Nome(nomeCurso, paginacao);
         return TopicoDto.converte(topicos);
     }
 
@@ -42,7 +50,7 @@ public class TopicoService {
     public Topico detalhar(Long id){
         Optional<Topico> topicoOptional = topicoRepository.findById(id);
         if(!topicoOptional.isPresent()){
-            return null;
+            return new Topico();
         }
         return topicoOptional.get();
     }
@@ -56,12 +64,12 @@ public class TopicoService {
         return topico;
     }
 
-    public List<TopicoDto> remover(Long id){
+    public Page<TopicoDto> remover(Long id){
         Optional<Topico> topico = topicoRepository.findById(id);
         if(topico.isPresent()){
             topicoRepository.deleteById(id);
-            return listar();
+            return listar(1, 5);
         }
-        return new ArrayList<>();
+        return null;
     }
 }
