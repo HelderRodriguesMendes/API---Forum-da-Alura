@@ -25,13 +25,13 @@ public class TopicosController {
     TopicoService topicoService;
 
     @GetMapping("/listar")
-    public Page<TopicoDto> listar(@RequestParam int pagina, @RequestParam int qtd){
-        return topicoService.listar(pagina, qtd);
+    public Page<TopicoDto> listar(@RequestParam int pagina, @RequestParam int qtd, @RequestParam String ordenacao){
+        return topicoService.listar(pagina, qtd, ordenacao);
     }
 
     @GetMapping("/pesquisarNome")
-    public Page<TopicoDto> pesquisar(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina, @RequestParam int qtd){
-        return topicoService.pesquisar(nomeCurso, pagina, qtd);
+    public Page<TopicoDto> pesquisar(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina, @RequestParam int qtd, @RequestParam String ordenacao){
+        return topicoService.pesquisar(nomeCurso, pagina, qtd, ordenacao);
     }
 
     @PostMapping("/salvar")
