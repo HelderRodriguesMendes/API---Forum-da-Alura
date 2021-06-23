@@ -7,6 +7,7 @@ import br.com.alura.forumAlura_API.controller.form.TopicoForm;
 import br.com.alura.forumAlura_API.model.Topico;
 import br.com.alura.forumAlura_API.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,6 +29,7 @@ public class TopicosController {
     TopicoService topicoService;
 
     @GetMapping("/listar")
+    @Cacheable(value = "listaTopicos")
     public Page<TopicoDto> listar(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable paginacao){
         return topicoService.listar(paginacao);
     }
