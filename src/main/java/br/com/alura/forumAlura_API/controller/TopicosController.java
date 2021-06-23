@@ -8,6 +8,9 @@ import br.com.alura.forumAlura_API.model.Topico;
 import br.com.alura.forumAlura_API.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -25,13 +28,13 @@ public class TopicosController {
     TopicoService topicoService;
 
     @GetMapping("/listar")
-    public Page<TopicoDto> listar(@RequestParam int pagina, @RequestParam int qtd, @RequestParam String ordenacao){
-        return topicoService.listar(pagina, qtd, ordenacao);
+    public Page<TopicoDto> listar(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable paginacao){
+        return topicoService.listar(paginacao);
     }
 
     @GetMapping("/pesquisarNome")
-    public Page<TopicoDto> pesquisar(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina, @RequestParam int qtd, @RequestParam String ordenacao){
-        return topicoService.pesquisar(nomeCurso, pagina, qtd, ordenacao);
+    public Page<TopicoDto> pesquisar(@RequestParam(required = false) String nomeCurso, @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable paginacao){
+        return topicoService.pesquisar(nomeCurso, paginacao);
     }
 
     @PostMapping("/salvar")
