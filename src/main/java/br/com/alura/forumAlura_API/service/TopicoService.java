@@ -5,6 +5,7 @@ import br.com.alura.forumAlura_API.controller.form.AtualizacaoTopicoForm;
 import br.com.alura.forumAlura_API.controller.form.TopicoForm;
 import br.com.alura.forumAlura_API.model.Curso;
 import br.com.alura.forumAlura_API.model.Topico;
+import br.com.alura.forumAlura_API.model.Usuario;
 import br.com.alura.forumAlura_API.repository.TopicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,17 +27,13 @@ public class TopicoService {
     @Autowired
     CursoService cursoService;
 
-    public Page<TopicoDto> listar(int pagina, int qtd, String ordenacao){
-
-        Pageable paginacao = PageRequest.of(pagina, qtd, Sort.Direction.ASC, ordenacao);
+    public Page<TopicoDto> listar(Pageable paginacao){
         Page<Topico> topicos = topicoRepository.findAll(paginacao);
 
         return TopicoDto.converte(topicos);
     }
 
-    public Page<TopicoDto> pesquisar(String nomeCurso, int pagina, int qtd, String ordenacao){
-
-        Pageable paginacao = PageRequest.of(pagina, qtd, Sort.Direction.ASC, ordenacao);
+    public Page<TopicoDto> pesquisar(String nomeCurso, Pageable paginacao){
 
         Page<Topico> topicos = topicoRepository.findByCurso_Nome(nomeCurso, paginacao);
         return TopicoDto.converte(topicos);
@@ -50,6 +47,7 @@ public class TopicoService {
 
     public Topico detalhar(Long id){
         Optional<Topico> topicoOptional = topicoRepository.findById(id);
+        topicoOptional.get().setAutor(new Usuario());
         if(!topicoOptional.isPresent()){
             return new Topico();
         }
@@ -69,7 +67,7 @@ public class TopicoService {
         Optional<Topico> topico = topicoRepository.findById(id);
         if(topico.isPresent()){
             topicoRepository.deleteById(id);
-            return listar(1, 5, "titulo");
+            return listar(Pageable.ofSize(10));
         }
         return null;
     }
