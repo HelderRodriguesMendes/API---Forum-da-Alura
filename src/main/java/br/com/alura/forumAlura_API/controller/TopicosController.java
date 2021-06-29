@@ -7,6 +7,7 @@ import br.com.alura.forumAlura_API.controller.form.TopicoForm;
 import br.com.alura.forumAlura_API.model.Topico;
 import br.com.alura.forumAlura_API.service.TopicoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +42,7 @@ public class TopicosController {
 
     @PostMapping("/salvar")
     @Transactional
+    @CacheEvict(value = "listaTopicos", allEntries = true)
     public ResponseEntity<TopicoDto> cadastrar(@RequestBody @Valid TopicoForm topicoForm, UriComponentsBuilder uriBuilder){
         Topico topico = topicoService.salvar(topicoForm);
         URI uri = uriBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
@@ -58,6 +60,7 @@ public class TopicosController {
 
     @PutMapping("/atualizar/{id}")
     @Transactional
+    @CacheEvict(value = "listaTopicos", allEntries = true)
     public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm atualizacaoTopicoForm){
         Topico topico = topicoService.atualizar(id, atualizacaoTopicoForm);
         if(topico == null){
@@ -68,6 +71,7 @@ public class TopicosController {
 
     @DeleteMapping("deletar/{id}")
     @Transactional
+    @CacheEvict(value = "listaTopicos", allEntries = true)
     public ResponseEntity<?> remover(@PathVariable Long id){
         Page<TopicoDto> topicoDtos = topicoService.remover(id);
 
