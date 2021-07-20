@@ -40,7 +40,7 @@ public class TopicosController {
         return topicoService.pesquisar(nomeCurso, paginacao);
     }
 
-    @PostMapping("/salvar")
+    @PostMapping("/cadastrar")
     @Transactional
     @CacheEvict(value = "listaTopicos", allEntries = true)
     public ResponseEntity<TopicoDto> cadastrar(@RequestBody @Valid TopicoForm topicoForm, UriComponentsBuilder uriBuilder){
