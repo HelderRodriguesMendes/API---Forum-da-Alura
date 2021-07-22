@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
@@ -30,10 +31,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         //liberando acesso para os metodos litar e detalhar
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/topico/listar").permitAll()
-        .antMatchers(HttpMethod.GET,"/topico/detalhar/*").permitAll().antMatchers(HttpMethod.POST,"/usuario/cadastrar/*").permitAll()
+        .antMatchers(HttpMethod.GET,"/topico/detalhar/*").permitAll()
+                .antMatchers(HttpMethod.POST,"/auth").permitAll()
 
-                //configurando o acesso dos demais metodos para ser apenas por autenticacao
-                .anyRequest().authenticated().and().formLogin();
+                //bloqueando cessao e verificacao por csrf
+                .anyRequest().authenticated().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     }
 
