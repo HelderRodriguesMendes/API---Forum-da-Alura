@@ -2,7 +2,7 @@ package br.com.alura.forumAlura_API.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Entity
 @Data
 @EqualsAndHashCode
-public class Perfil implements GrantedAuthority {
+public class Perfil {//implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class Perfil implements GrantedAuthority {
 
     private String nome;
 
-    @Override
+    //@Override
     public String getAuthority() {
         return this.nome;
     }
